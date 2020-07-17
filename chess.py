@@ -315,7 +315,7 @@ class Board:
         dead = self.get_piece(end)
         self.remove(end)
         self.move(start, end)
-        if dead.name == "king":
+        if dead and dead.name == "king":
           self.winner = start_piece.colour
           print(f'Game over. {self.winner} player wins!')
         else:
