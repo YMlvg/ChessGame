@@ -1,3 +1,30 @@
+class ConsoleInterface:
+    def __init__(self):
+        pass
+
+    def set_board(self, inputstr):
+        '''
+        Takes board info as an inputstr
+        and prints it to the console.
+        '''
+        print(inputstr)
+
+    def set_msg(self, inputstr):
+        '''
+        Takes an inputstr and prints it
+        to the console.
+        '''
+        print(inputstr)
+
+    def get_player_input(self, msgstr):
+        '''
+        Prompts the user with a msgstr,
+        returns their input as str.
+        '''
+        value = input(msgstr)
+        return value
+
+
 class Board:
     '''
     The game board is represented as an 8×8 grid,
@@ -13,9 +40,10 @@ class Board:
     01  11  21  31  41  51  61  71
     00  10  20  30  40  50  60  70
     '''
-    def __init__(self, debug=False):
-        self.position = {}
-        self.debug = debug
+    def __init__(self, **kwargs):
+        self.inputf = kwargs.get('inputf', input)
+        self.printf = kwargs.get('printf', print)
+
 
     def coords(self):
         '''Return list of piece coordinates.'''
@@ -110,7 +138,7 @@ class Board:
         for coord in self.get_coords(colour=player_colour):
           if self.valid_move(coord, opponent_king_coord):
             checked = opponent_colour
-            print(f"{checked} is checked.")
+            self.printf(f"{checked} is checked.")
 
     def uncheck(self, colour):
         '''
@@ -270,7 +298,7 @@ class Board:
             return (start, end)
         
         while True:
-            inputstr = input(f'{self.turn.title()} player: ')
+            inputstr = self.inputf(f'{self.turn} player: ')
             if not valid_format(inputstr):
                 print('Invalid input. Please enter your move in the '
                       'following format: __ __, _ represents a digit.')
@@ -948,30 +976,7 @@ class Rook(BasePiece):
             or (abs(y) == 0 and abs(x) != 0) 
 
 
-class Pawn(BasePiece):
-    name = 'pawn'
-    sym = {'white': '♙', 'black': '♟︎'}
-    moved = False
-    def __repr__(self):
-        return f"Pawn('{self.name}')"
 
-    def isvalid(self, start: tuple, end: tuple):
-        '''Pawn can only move 1 step forward.'''
-        x, y, dist = self.vector(start, end)
-        if x == 0:
-            if self.colour == 'black':
-                if self.moved:
-                    return (y == -1)
-                else:
-                    return (y == -2)
-            elif self.colour == 'white':
-                if self.moved:
-                    return (y == 1)
-                else:
-                    return (y == 2)
-            else:
-                return False
-        return False
 
 
 
