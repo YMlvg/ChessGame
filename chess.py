@@ -1,20 +1,22 @@
-class ConsoleInterface:
+class ConsoleInterface: 
     def __init__(self):
         pass
 
-    def set_board(self, inputstr):
+    def set_board(self, inputstr, **kwargs):
         '''
         Takes board info as an inputstr
         and prints it to the console.
         '''
+        end = kwargs.get("end",None)
         print(inputstr)
 
-    def set_msg(self, inputstr):
+    def set_msg(self, inputstr,**kwargs):
         '''
         Takes an inputstr and prints it
         to the console.
         '''
-        print(inputstr)
+        var_end = kwargs.get("end","\n")
+        print(inputstr,end=var_end)
 
     def get_player_input(self, msgstr):
         '''
@@ -23,6 +25,8 @@ class ConsoleInterface:
         '''
         value = input(msgstr)
         return value
+
+
 
 class Board:
     '''
@@ -39,9 +43,11 @@ class Board:
     01  11  21  31  41  51  61  71
     00  10  20  30  40  50  60  70
     '''
-    def __init__(self, **kwargs):
+    def __init__(self, debug=False,**kwargs):
+        self.position = {}
         self.inputf = kwargs.get('inputf',input)
         self.printf = kwargs.get('printf',print)
+        self.debug = debug
 
     def coords(self):
         '''Return list of piece coordinates.'''
@@ -78,7 +84,7 @@ class Board:
             if piece.name == name:
               coords.append(coord)
           else:
-            print("get_coords() requires atleast 1 argument")
+            self.printf("get_coords() requires atleast 1 argument")
 
         return coords
 
@@ -133,7 +139,7 @@ class Board:
         for coord in self.get_coords(colour=player_colour):
           if self.valid_move(coord, opponent_king_coord):
             checked = opponent_colour
-            print(f"{checked} is checked.")
+            self.printf(f"{checked} is checked.")
 
     def uncheck(self, colour):
         '''
@@ -161,7 +167,7 @@ class Board:
 
       start, end = combine(start), combine(end)
       move = f"{piece} {start} -> {end}"
-      print(move)
+      self.printf(move)
       with open("moves.txt", "a") as f:
         f.write(move+"\n")
 
@@ -180,17 +186,17 @@ class Board:
     
     def prompt_for_piece_promotion(self):
         '''
-        get input of what the pawn will be promoted to
+        get inputfof what the pawn will be promoted to
         '''
         invalid = True
         while invalid:
-            print(
+            self.printf(
                 'please choose a piece you want to promote to,the input sould be one of the following:\nqueen knight bishop rook\n')
             
-            new = input()
+            new = self.inputf()
             
             if not new in ['queen','knight','bishop','rook']:
-                print('wrong input. the input sould be one          of the following:\n queen knight            bishop rook\n')
+                self.printf('wrong input. the input sould be one          of the following:\n queen knight            bishop rook\n')
             else:
                 invalid = False
         return new
@@ -234,29 +240,29 @@ class Board:
         # Row 7 is at the top, so print in reverse order
 
         if self.debug:
-          print("== DISPLAY ==")
+          self.printf("== DISPLAY ==")
         
         for row in range(7, -1, -1):#print the indicating number for column and row
           if row == 7:
-            print(" ",end="")
+            self.printf(" ",end="")
             for num in range(8):
-              print(str(num)+" ", end='')
-            print('')
+              self.printf(str(num)+" ", end='')
+            self.printf('')
             
           for col in range(8):
             if col < 1:
-              print(row, end="")
+              self.printf(row, end="")
             coord = (col, row)  # tuple
             if coord in self.coords():
                 piece = self.get_piece(coord)
-                print(f'{piece.symbol()}', end='')
+                self.printf(f'{piece.symbol()}', end='')
             else:
                 piece = None
-                print(' ', end='')
+                self.printf(' ', end='')
             if col == 7:     # Put line break at the end
-                print('')
+                self.printf('')
             else:            # Print a space between pieces
-                print(' ', end='')
+                self.printf(' ', end='')
 
     def prompt(self):
         '''
@@ -266,11 +272,11 @@ class Board:
         e.g. 07 27
         '''
         if self.debug:
-          print("== PROMPT ==")
+          self.printf("== PROMPT ==")
 
         def valid_format(inputstr):
             '''
-            Ensure input is 5 characters: 2 numerals,
+            Ensure inputf is 5 characters: 2 numerals,
             followed by a space,
             followed by 2 numerals
             '''
@@ -293,18 +299,18 @@ class Board:
             return (start, end)
         
         while True:
-            inputstr = input(f'{self.turn.title()} player: ')
+            inputstr = self.inputf(f'{self.turn.title()} player: ')
             if not valid_format(inputstr):
-                print('Invalid input. Please enter your move in the '
+                self.printf('Invalid input. Please enter your move in the '
                       'following format: __ __, _ represents a digit.')
             elif not valid_num(inputstr):
-                print('Invalid input. Move digits should be 0-7.')
+                self.printf('Invalid inputf. Move digits should be 0-7.')
             else:
                 start, end = split_and_convert(inputstr)
                 if self.valid_move(start, end):
                     return start, end
                 else:
-                    print(f'Invalid move for {self.get_piece(start)}.')
+                    self.printf(f'Invalid move for {self.get_piece(start)}.')
 
     def valid_move(self, start, end):
         '''
@@ -335,7 +341,7 @@ class Board:
         '''
 
         if self.debug:
-          print("== UPDATE ==")
+          self.printf("== UPDATE ==")
 
         start_piece = self.get_piece(start)
         dead = self.get_piece(end)
@@ -343,7 +349,7 @@ class Board:
         self.move(start, end)
         if dead and dead.name == "king":
           self.winner = start_piece.colour
-          print(f'Game over. {self.winner} player wins!')
+          self.printf(f'Game over. {self.winner} player wins!')
         else:
           self.check(self.turn)
 
@@ -357,7 +363,7 @@ class Board:
     def next_turn(self):
         '''Hand the turn over to the other player.'''
         if self.debug:
-          print("== NEXT TURN ==")
+          self.printf("== NEXT TURN ==")
 
         if self.turn == 'white':
             self.turn = 'black'

@@ -5,7 +5,7 @@ game = Board(inputf=ui.get_player_input,
              printf=ui.set_msg,
              )
 game.start()
-while game.winner() is None:
+while game.winner is None:
     ui.set_board(game.display())
     while True:
         start, end = game.prompt()
