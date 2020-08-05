@@ -39,9 +39,9 @@ class Board:
     01  11  21  31  41  51  61  71
     00  10  20  30  40  50  60  70
     '''
-    def __init__(self, debug=False):
-        self.position = {}
-        self.debug = debug
+    def __init__(self, **kwargs):
+        self.inputf = kwargs.get('inputf',input)
+        self.printf = kwargs.get('printf',print)
 
     def coords(self):
         '''Return list of piece coordinates.'''
