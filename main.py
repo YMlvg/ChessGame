@@ -1,6 +1,7 @@
-from chess import Board, King, Queen, Bishop, Knight, Rook, Pawn
+from chess import Board, King, Queen, Bishop, Knight, Rook, Pawn,ConsoleInterface
 
-game = Board(debug=True)
+ui = ConsoleInterface()
+game = Board('''debug=True,''')
 game.start()
 while game.winner is None:
     game.display()

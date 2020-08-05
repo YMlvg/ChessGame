@@ -1,3 +1,29 @@
+class ConsoleInterface:
+    def __init__(self):
+        pass
+
+    def set_board(self, inputstr):
+        '''
+        Takes board info as an inputstr
+        and prints it to the console.
+        '''
+        print(inputstr)
+
+    def set_msg(self, inputstr):
+        '''
+        Takes an inputstr and prints it
+        to the console.
+        '''
+        print(inputstr)
+
+    def get_player_input(self, msgstr):
+        '''
+        Prompts the user with a msgstr,
+        returns their input as str.
+        '''
+        value = input(msgstr)
+        return value
+
 class Board:
     '''
     The game board is represented as an 8×8 grid,
