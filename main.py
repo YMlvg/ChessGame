@@ -7,6 +7,7 @@ game = Board(inputf=ui.get_player_input,
 game.start()
 while game.winner is None:
     ui.set_board(game.display())
+    print(ui.inputstr_list)
     while True:
         start, end = game.prompt()
         if game.valid_move(start, end):

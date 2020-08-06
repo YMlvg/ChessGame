@@ -2,6 +2,7 @@ import curses
 class TextInterface: 
   def __init__(self):
     stdscr = curses.initscr()
+    self.inputstr_list = []
     self.boardwin = curses.newwin(11,40,0,0)
     self.msgwin = curses.newwin(5,40,11,0)
     self.inputwin = curses.newwin(3,40,16,0)
@@ -18,6 +19,7 @@ class TextInterface:
     Takes board info as an inputstr
     and prints it to the console.
     '''
+    self.inputstr_list.append(inputstr)
     inputstr = str(inputstr)
     self.boardwin.addstr(0, 0, inputstr)
     self.boardwin.refresh()
@@ -29,7 +31,8 @@ class TextInterface:
     to the console.
     '''
     inputstr = str(inputstr)
-    self.msgwin.addstr(0, 0, inputstr)
+    self.msgwin.addstr(2, 2, inputstr)
+    self.msgwin.refresh()
 
   def get_player_input(self, msgstr):
     '''
