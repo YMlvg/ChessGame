@@ -1,6 +1,6 @@
-from chess import Board, King, Queen, Bishop, Knight, Rook, Pawn, ConsoleInterface
+from chess import Board, King, Queen, Bishop, Knight, Rook, Pawn, ConsoleInterface,TextInterface
 import curses
-ui = ConsoleInterface()
+ui = TextInterface()
 game = Board(inputf=ui.get_player_input,
              printf=ui.set_msg,
              )
