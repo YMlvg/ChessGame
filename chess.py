@@ -19,7 +19,7 @@ class TextInterface:
     and prints it to the console.
     '''
     inputstr = str(inputstr)
-    self.boardwin.addstr(0, 0, inputstr)
+    self.boardwin.addstr(1, 1, inputstr)
     self.boardwin.refresh()
     
 
@@ -277,32 +277,37 @@ class Board:
         Each piece is represented by a coloured symbol.
         '''
         # helper function to generate symbols for piece
-        # Row 7 is at the top, so print in reverse order
-
+        # Row 7 is at the top, so print in reverse order    
+        returning = ''
         if self.debug:
           self.printf("== DISPLAY ==")
         
         for row in range(7, -1, -1):#print the indicating number for column and row
-          if row == 7:
-            self.printf(" ",end="")
-            for num in range(8):
-              self.printf(str(num)+" ", end='')
-            self.printf('')
+            if row == 7:
+                returning += ' '
+                for num in range(8):
+                    returning += ' ' + str(num)+ " "
+            returning += '\n'
+
             
-          for col in range(8):
-            if col < 1:
-              self.printf(row, end="")
-            coord = (col, row)  # tuple
-            if coord in self.coords():
-                piece = self.get_piece(coord)
-                self.printf(f'{piece.symbol()}', end='')
-            else:
-                piece = None
-                self.printf(' ', end='')
-            if col == 7:     # Put line break at the end
-                self.printf('')
-            else:            # Print a space between pieces
-                self.printf(' ', end='')
+            for col in range(8):
+                if col < 1:
+                    returning += f' {row}'
+                coord = (col, row)  # tuple
+                if coord in self.coords():
+                    piece = self.get_piece(coord)
+                    returning += f'{piece.symbol()}'
+                else:
+                    piece = None
+                    returning += ' '
+                if col == 7:     # Put line break at the end
+                    returning += '\n'
+                else:            # Print a space between pieces
+                    returning += ' '
+        returning += '\n'
+
+
+        return returning
 
     def prompt(self):
         '''
