@@ -2,16 +2,17 @@ import curses
 class TextInterface: 
   def __init__(self):
     stdscr = curses.initscr()
-    y, x = 0, 0
-    self.boardwin = curses.newwin(11, 40, y, x)
-    y += 11
-    self.msgwin = curses.newwin(5, 40, y, x)
-    y+= 5
-    self.inputwin = curses.newwin(3, 40, y, x)
-
-
-
-
+    self.boardwin = curses.newwin(11,40,0,0)
+    self.msgwin = curses.newwin(5,40,11,0)
+    self.inputwin = curses.newwin(3,40,16,0)
+    self.boardwin.border()
+    self.msgwin.border()
+    self.inputwin.border()
+    self.boardwin.refresh()
+    self.msgwin.refresh()
+    self.inputwin.refresh()
+    
+    
   def set_board(self, inputstr):
     '''
     Takes board info as an inputstr
@@ -19,14 +20,15 @@ class TextInterface:
     '''
     inputstr = str(inputstr)
     self.boardwin.addstr(0, 0, inputstr)
+    self.boardwin.refresh()
+    
 
   def set_msg(self, inputstr,**kwargs):
     '''
     Takes an inputstr and prints it
     to the console.
     '''
-    var_end = kwargs.get("end","\n")
-    inputstr = ()
+    inputstr = str(inputstr)
     self.msgwin.addstr(0, 0, inputstr)
 
   def get_player_input(self, msgstr):
@@ -224,7 +226,7 @@ class Board:
     
     def prompt_for_piece_promotion(self):
         '''
-        get inputfof what the pawn will be promoted to
+        get input of what the pawn will be promoted to
         '''
         invalid = True
         while invalid:
@@ -314,7 +316,7 @@ class Board:
 
         def valid_format(inputstr):
             '''
-            Ensure inputf is 5 characters: 2 numerals,
+            Ensure input is 5 characters: 2 numerals,
             followed by a space,
             followed by 2 numerals
             '''
