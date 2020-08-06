@@ -19,9 +19,15 @@ class TextInterface:
     Takes board info as an inputstr
     and prints it to the console.
     '''
-    self.inputstr_list.append(inputstr)
-    inputstr = str(inputstr)
-    self.boardwin.addstr(1, 1, inputstr)
+    #self.inputstr_list.append(inputstr)
+    #inputstr = str(inputstr)
+    #self.boardwin.addstr(1, 1, inputstr)
+    self.stdscr.addstr(curse)
+    inputstr = inputstr.split("\n")
+    y = 1
+    while len(inputstr) != 0:
+      self.boardwin.addstr(0,y,inputstr[y-1])
+      y += 1
     self.boardwin.refresh()
     
 
