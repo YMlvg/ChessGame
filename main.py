@@ -6,17 +6,16 @@ game = Board(inputf=ui.get_player_input,
              )
 game.start()
 while game.winner is None:
-    # import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     ui.set_board(game.display())
-    print(ui.inputstr_list)
     while True:
         start, end = game.prompt()
         if game.valid_move(start, end):
             break
         else:
             ui.set_msg(f'Invalid move: {start} -> {end}')
-    ui.set_msg(game.format_move(start, end))
+    #ui.set_msg(game.format_move(start, end))
     game.update(start, end)
     game.next_turn()
-ui.set_msg(f'Game over. {game.winner()} player wins!')
+ui.set_msg(f'Game over. {game.winner} player wins!')
 

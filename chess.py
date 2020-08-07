@@ -7,8 +7,11 @@ class TextInterface:
     self.msgwin = curses.newwin(5,40,11,0)
     self.inputwin = curses.newwin(3,40,16,0)
     self.boardwin.border()
+    self.boardwin.addstr(0,1,"Board")
     self.msgwin.border()
+    self.msgwin.addstr(0,1,"Message")
     self.inputwin.border()
+    self.inputwin.addstr(0,1,"Input")
     self.boardwin.refresh()
     self.msgwin.refresh()
     self.inputwin.refresh()
@@ -26,10 +29,9 @@ class TextInterface:
     inputstr = inputstr.split("\n")
     y = 1
     while y <= len(inputstr):
-        self.boardwin.addstr(y,0,inputstr[y-1])
+        self.boardwin.addstr(y,1,inputstr[y-1])
         #import pdb; pdb.set_trace()
         y += 1
-        
     self.boardwin.refresh()
     
 
@@ -38,8 +40,21 @@ class TextInterface:
     Takes an inputstr and prints it
     to the console.
     '''
-    inputstr = str(inputstr)
-    self.msgwin.addstr(2, 2, inputstr)
+    self.msgwin.erase()
+    strdata = str(inputstr)
+    self.msgwin.border()
+    self.msgwin.addstr(0,1,"Message")
+    inputstr = []
+    num_round = len(strdata) // 38
+    for n in range(num_round):
+        line = strdata[0:38]
+        strdata = strdata[38:]
+        inputstr.append(line)
+    if num_round != 2:
+        inputstr.append(strdata)
+    for num in range(len(inputstr)):
+        self.msgwin.addstr(num+1,1,inputstr[num])
+    #self.msgwin.addstr(1,1,strdata)
     self.msgwin.refresh()
 
   def get_player_input(self, msgstr):
@@ -47,7 +62,15 @@ class TextInterface:
     Prompts the user with a msgstr,
     returns their input as str.
     '''
-    value = input(msgstr)
+    #self.msgwin.erase()
+    #self.inputwin.border()
+    self.inputwin.addstr(0,1,"Input")
+
+    input_msg = msgstr
+
+    self.inputwin.addstr(1,1,input_msg)
+    value = self.inputwin.getstr(1,len(input_msg))
+    value = value.decode('utf-8')
     return value
 
 class ConsoleInterface: 
@@ -297,7 +320,7 @@ class Board:
             if row == 7:
                 returning += ' '
                 for num in range(8):
-                    returning += ' ' + str(num)+ " "
+                    returning += ' ' + str(num)
                 returning += '\n'
 
             
