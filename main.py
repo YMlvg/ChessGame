@@ -6,6 +6,7 @@ game = Board(inputf=ui.get_player_input,
              )
 game.start()
 while game.winner is None:
+    # import pdb; pdb.set_trace()
     ui.set_board(game.display())
     print(ui.inputstr_list)
     while True:

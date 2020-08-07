@@ -22,12 +22,14 @@ class TextInterface:
     #self.inputstr_list.append(inputstr)
     #inputstr = str(inputstr)
     #self.boardwin.addstr(1, 1, inputstr)
-    self.stdscr.addstr(curse)
+    inputstr = inputstr.rstrip("\n")
     inputstr = inputstr.split("\n")
     y = 1
-    while len(inputstr) != 0:
-      self.boardwin.addstr(0,y,inputstr[y-1])
-      y += 1
+    while y <= len(inputstr):
+        self.boardwin.addstr(y,0,inputstr[y-1])
+        #import pdb; pdb.set_trace()
+        y += 1
+        
     self.boardwin.refresh()
     
 
@@ -296,7 +298,7 @@ class Board:
                 returning += ' '
                 for num in range(8):
                     returning += ' ' + str(num)+ " "
-            returning += '\n'
+                returning += '\n'
 
             
             for col in range(8):
@@ -313,7 +315,7 @@ class Board:
                     returning += '\n'
                 else:            # Print a space between pieces
                     returning += ' '
-        returning += '\n'
+        #returning += '\n'
 
 
         return returning
